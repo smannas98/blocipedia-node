@@ -2,9 +2,10 @@
   "name": "blocipedia",
   "version": "1.0.0",
   "description": "blocipedia project",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "export NODE_ENV=test && jasmine",
+    "start": "node src/server.js"
   },
   "author": "Sean Mannas",
   "license": "ISC",
@@ -18,19 +19,20 @@
     "express-flash": "0.0.2",
     "express-session": "^1.16.1",
     "express-validator": "^5.3.1",
-    "faker": "^4.1.0",
-    "jasmine": "^3.4.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pg": "^7.9.0",
     "pg-hstore": "^2.3.2",
-    "request": "^2.88.0",
     "sequelize": "^5.3.1",
     "sequelize-cli": "^5.4.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0"
+    "eslint-plugin-import": "^2.16.0",
+    "faker": "^4.1.0",
+    "jasmine": "^3.4.0",
+    "morgan": "^1.9.1",
+    "request": "^2.88.0"
   }
 }
