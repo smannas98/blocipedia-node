@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ./partials/head.ejs %>
+  </head>
+  <body>
+
+    <!-- navbar -->
+    <% include ./partials/navbar.ejs %>
+
+    <!-- main page -->
+    <main class="container">
+      <!-- header -->
+      <header class="jumbotron my-4">
+        <h1 class="display-3">Welcome to Blocipedia</h1>
+        <p class="lead">An open source information database where users can contribute freely</p>
+        <a href="/users/sign_up" class="btn btn-primary btn-lg">Sign up</a>
+      </header>
+
+      <section class="row text-center">
+        <section class="col-lg-4">
+          <h3 class="card-title">Create public or private wikis</h3>
+          <p class="card-text">
+            Feel free to sign up and make your own public wiki on your most passionate subject! With just a small donation,
+            you can even make a private wiki to ensure nobody tampers with your beloved wiki!
+          </p>
+        </section>
+        <section class="col-lg-4">
+          <h3 class="card-title">Contribute to the open source public wikis created by your peers!</h3>
+          <p class="card-text">
+            As a free user, you can edit and update other user's wikis if you find the information to be incorrect or a little off topic,
+            it's all up to you!
+          </p>
+        </section>
+      </section>
+    </main>
+    <% include ./partials/baseScripts.ejs %>
+  </body>
+</html>
