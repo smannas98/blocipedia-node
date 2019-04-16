@@ -17,7 +17,6 @@ module.exports = {
     app.use(logger('dev'));
     app.use(expressValidator());
     app.use(flash());
-    app.use(express.cookieParser('do not let this get checked into version control'));
     app.use(session({
       secret: process.env.cookieSecret,
       resave: false,
