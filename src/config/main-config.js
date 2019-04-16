@@ -16,12 +16,12 @@ module.exports = {
     app.use(express.static(path.join(__dirname, '..', 'assets')));
     app.use(logger('dev'));
     app.use(expressValidator());
-    app.use(flash());
     app.use(session({
       secret: process.env.cookieSecret,
       resave: false,
       saveUninitialized: false,
       cookie: { maxAge: 1.21e+9 },
     }));
+    app.use(flash());
   },
 };
