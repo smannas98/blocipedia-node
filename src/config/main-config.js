@@ -17,6 +17,7 @@ module.exports = {
     app.use(logger('dev'));
     app.use(expressValidator());
     app.use(flash());
+    app.use(express.cookieParser('cookieSecret'));
     app.use(session({
       secret: process.env.cookieSecret,
       resave: false,
