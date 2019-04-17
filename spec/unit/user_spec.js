@@ -16,11 +16,11 @@ describe('User', () => {
     it('should create a User object with a valid email and password', (done) => {
       User.create({
         userName: 'user1',
-        email: 'user@example.com',
+        email: 'seanmanns02@gmail.com',
         password: '123456',
       })
       .then((user) => {
-        expect(user.email).toBe('user@example.com');
+        expect(user.email).toBe('seanmanns02@gmail.com');
         expect(user.password).toBe('123456');
         done();
         })

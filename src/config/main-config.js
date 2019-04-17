@@ -5,6 +5,7 @@ const logger = require('morgan');
 const expressValidator = require('express-validator');
 const flash = require('express-flash');
 const session = require('express-session');
+const passportConfig = require('./passport');
 
 const viewsFolder = path.join(__dirname, '..', 'views');
 
@@ -23,5 +24,10 @@ module.exports = {
       cookie: { maxAge: 1.21e+9 },
     }));
     app.use(flash());
+    passportConfig.init(app);
+    app.use((req, res, next) => {
+      res.locals.currentUser = req.user;
+      next();
+    });
   },
 };
