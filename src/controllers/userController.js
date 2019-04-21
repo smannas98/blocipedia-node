@@ -6,10 +6,12 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY); // api to send out emails
 
 module.exports = {
   signUp(req, res, next) {
-    console.log('userController.signUp');
-    res.render('users/signup');
+    console.log('enter userController.signUp');
+    res.render('users/signup', { error: false });
   },
   create(req, res, next) {
+    console.log('enter userController.create');
+
     const newUser = {
       userName: req.body.userName,
       email: req.body.email,
@@ -24,11 +26,13 @@ module.exports = {
       html: '<strong>You have successfully created a new user.</strong>',
     };
     userQueries.createUser(newUser, (err, user) => {
+      console.log('entering userController.create:createUser');
       if (err) {
-        console.log(err);
+        console.log('userController.create:createUser error', err);
         req.flash('error', err);
         res.redirect('/users/sign_up');
       } else {
+        console.log('userController.create:createUser successful');
         passport.authenticate('local')(req, res, () => {
           req.flash('notice', 'You have successfully signed in!');
           sgMail.send(msg);
@@ -41,7 +45,7 @@ module.exports = {
     res.render('users/signin');
   },
   signIn(req, res, next) {
-    passport.authenticate('local', function(err, user, info) {
+    passport.authenticate('local', (err, user, info) => {
       if (err) {
         console.log(err);
         return next(err);
@@ -52,7 +56,7 @@ module.exports = {
         return res.redirect('/users/sign_in');
       }
       req.flash('You have successfully signed in!');
-      req.logIn(user, function(err) {
+      req.logIn(user, (err) => {
         if (err) {
           console.log(err);
           return next(err);
@@ -60,7 +64,7 @@ module.exports = {
         return res.redirect('/');
       });
     })(req, res, next);
-/*
+    /*
     passport.authenticate('local')(req, res, () => {
       if (!req.user) {
         req.flash('Sign in failed. Please try again.');
@@ -71,5 +75,9 @@ module.exports = {
       }
     });
 */
+  },
+  signOut(req, res, next) {
+    req.logOut();
+    res.redirect('/');
   },
 };

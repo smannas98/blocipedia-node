@@ -7,6 +7,16 @@
 
     <% include ../static/partials/navbar.ejs %>
 
+    <% if (error) { %>
+      <div class="container" style="margin-top: 15px;">
+        <div class="col-xs-12">
+          <div class="alert alert-danger" role="alert">
+            <%= error %>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
     <main class="container">
       <h2>Welcome to Blocipedia</h2>
       <div class="row">
