@@ -5,6 +5,7 @@ const logger = require('morgan');
 const expressValidator = require('express-validator');
 const flash = require('express-flash');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const passportConfig = require('./passport');
 
 const viewsFolder = path.join(__dirname, '..', 'views');
@@ -14,6 +15,7 @@ module.exports = {
     app.set('views', viewsFolder);
     app.set('view engine', 'ejs');
     app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(cookieParser());
     app.use(express.static(path.join(__dirname, '..', 'assets')));
     app.use(logger('dev'));
     app.use(expressValidator());

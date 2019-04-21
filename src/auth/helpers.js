@@ -5,9 +5,8 @@ module.exports = {
     if (!req.user) {
       req.flash('You must be signed in to do that.');
       return res.redirect('/users/sign_in');
-    } else {
-      next();
     }
+    next();
   },
   comparePassword(userPassword, databasePassword) {
     return bcrypt.compareSync(userPassword, databasePassword);

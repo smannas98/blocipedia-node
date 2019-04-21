@@ -5,32 +5,31 @@ const { User } = require('../db/models');
 
 module.exports = {
   init(app) {
+    console.log('Entering passport.init');
     app.use(passport.initialize());
     app.use(passport.session());
     passport.use(new LocalStrategy({
       usernameField: 'email',
     }, (email, password, done) => {
+      console.log(email);
       User.findOne({
         where: { email },
       })
-      .then((user) => {
-        if (!user || authHelper.comparePassword(password, user.password)) {
-          console.log('passport config says no user available');
-          return done(null, false, { message: 'Invalid email or password' });
-        }
-        return done(null, user);
-      });
+        .then((user) => {
+          console.log(user);
+          if (!user || !authHelper.comparePassword(password, user.password)) {
+            console.log('passport config says no user available');
+            return done(null, false, { message: 'Invalid email or password' });
+          }
+          return done(null, user);
+        });
     }));
-    passport.serializeUser((user, callback) => {
-      callback(null, user.id);
+    passport.serializeUser((user, done) => {
+      done(null, user.id);
     });
-    passport.deserializeUser((id, callback) => {
-      User.findById(id).then((user) => {
-        callback(null, user);
-      })
-      .catch((err) => {
-        callback(err, user);
-      });
+    passport.deserializeUser((userId, done) => {
+      console.log('user', User);
+        done(null, userId);
     });
   },
 };
