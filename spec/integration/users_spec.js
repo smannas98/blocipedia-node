@@ -8,13 +8,13 @@ const base = 'http://localhost:3000/users/';
 describe('routes : users', () => {
   beforeEach((done) => {
     sequelize.sync({ force: true })
-    .then(() => {
-      done();
-    })
-    .catch((err) => {
-      console.log(err);
-      done();
-    });
+      .then(() => {
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+        done();
+      });
   });
   describe('GET /users/sign_up', () => {
     it('should render a view with a sign up page', (done) => {
@@ -37,17 +37,17 @@ describe('routes : users', () => {
       };
       request.post(options, (err, res, body) => {
         User.findOne({ where: { email: 'email@email.com' } })
-        .then((user) => {
-          expect(user).not.toBeNull();
-          expect(user.email).toBe('email@email.com');
-          expect(user.userName).toBe('smannas');
-          expect(user.id).toBe(1);
-          done();
-        })
-        .catch((err) => {
-          console.log(err);
-          done();
-        });
+          .then((user) => {
+            expect(user).not.toBeNull();
+            expect(user.email).toBe('email@email.com');
+            expect(user.userName).toBe('smannas');
+            expect(user.id).toBe(1);
+            done();
+          })
+          .catch((err) => {
+            console.log(err);
+            done();
+          });
       });
     });
     it('should not create a user with invalid values', (done) => {
@@ -60,15 +60,15 @@ describe('routes : users', () => {
         },
       };
       request.post(options, (err, res, body) => {
-        User.findOne({ where: { email: 'noEmail'} })
-        .then((user) => {
-          expect(user).toBeNull();
-          done();
-        })
-        .catch((err) => {
-          console.log(err);
-          done();
-        });
+        User.findOne({ where: { email: 'noEmail' } })
+          .then((user) => {
+            expect(user).toBeNull();
+            done();
+          })
+          .catch((err) => {
+            console.log(err);
+            done();
+          });
       });
     });
   });
