@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../static/partials/head.ejs %>
+  </head>
+  <body>
+    <% include ../static/partials/navbar.ejs %>
+
+    <main class="container">
+      <div style="display: flex; align-items: center;">
+        <% if(currentUser) { %>
+          <a href="/wikis/<%= wiki.id %>/edit" class="btn btn-warning">Edit Wiki</a>
+          <form style="display:initial" action="/wikis/destroy" method="post">
+            <button type="submit" class="btn btn-danger">Delete Wiki</button>
+          </form>
+        <% } %>
+        <h1><%= wiki.title %></h1>
+      </div>
+      <p><%= wiki.body %></p>
+    </main>
+    <% include ../static/partials/baseScripts.ejs %>
+  </body>
+</html>

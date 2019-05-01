@@ -37,7 +37,7 @@ describe('routes : wikis', () => {
 
   describe('GET /wikis', () => {
     it('should render a view that displays all wikis', (done) => {
-      request.get(`${base}`, (er, res, body) => {
+      request.get(`${base}`, (err, res, body) => {
         expect(err).toBeNull();
         expect(body).toContain('All Wikis');
         expect(body).toContain('wikis!');
@@ -48,7 +48,7 @@ describe('routes : wikis', () => {
 
   describe('GET /wikis/:id', () => {
     it('should render a view of the wiki', (done) => {
-      request.get(`${base}${this.wiki.id}`, (er, res, body) => {
+      request.get(`${base}${this.wiki.id}`, (err, res, body) => {
         expect(err).toBeNull();
         expect(body).toContain('this is informational.');
         expect(body).toContain('wikis!');
@@ -142,7 +142,7 @@ describe('routes : wikis', () => {
         expect(err).toBeNull();
         Wiki.findOne({ where: { id: this.wiki.id } })
           .then((wiki) => {
-            expect(wiki.title).tobe('updated title');
+            expect(wiki.title).toBe('updated title');
             done();
           })
           .catch((err) => {
