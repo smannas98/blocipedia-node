@@ -27,7 +27,7 @@ module.exports = {
     });
   },
   newForm(req, res, next) {
-    res.render('wikis/new');
+    res.render('wikis/new.ejs');
   },
   create(req, res, next) {
     if (req.user) {

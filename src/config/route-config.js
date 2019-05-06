@@ -9,8 +9,8 @@ module.exports = {
       mockAuth.fakeIt(app);
     }
 
-    //app.use(staticRoutes);
-  //  app.use(userRoutes);
+    app.use(staticRoutes);
+    app.use(userRoutes);
     app.use(wikiRoutes);
   },
 };
