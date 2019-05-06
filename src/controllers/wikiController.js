@@ -26,12 +26,8 @@ module.exports = {
       }
     });
   },
-  new(req, res, next) {
-    if (req.user) {
-      res.render('wikis/new');
-    } else {
-      res.redirect('/');
-    }
+  newForm(req, res, next) {
+    res.render('wikis/new');
   },
   create(req, res, next) {
     if (req.user) {

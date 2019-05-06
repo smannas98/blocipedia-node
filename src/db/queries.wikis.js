@@ -11,7 +11,7 @@ module.exports = {
       });
   },
   getWiki(id, callback) {
-    return Wiki.findById(id, {
+    return Wiki.findOne({ where: { id } }, {
       include: [
         { model: User },
       ],
@@ -24,7 +24,7 @@ module.exports = {
       });
   },
   getAllWikis(callback, callbackOnError) {
-    return Wiki.all().then((wikis) => {
+    return Wiki.findAll().then((wikis) => {
       callback(wikis);
     })
       .catch((err) => {
@@ -32,7 +32,7 @@ module.exports = {
       });
   },
   updateWiki(id, updatedWiki, callback) {
-    return Wiki.findById(id).then((wiki) => {
+    return Wiki.findOne({ where: { id } }).then((wiki) => {
       if (!wiki) {
         return callback('Wiki not found.');
       }
