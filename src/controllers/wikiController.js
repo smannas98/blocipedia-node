@@ -19,25 +19,32 @@ module.exports = {
     wikiQueries.getWiki(req.params.id, (err, wiki) => {
       if (err || wiki == null) {
         res.redirect(404, '/');
-      } else if (req.user) {
-        res.render('wikis/edit', { wiki });
-      } else {
-        res.redirect(`/wikis/${req.params.id}`);
       }
+      res.render('wikis/edit', { wiki });
     });
   },
-  newForm(req, res, next) {
-    res.render('wikis/new.ejs');
+  new(req, res, next) {
+    res.render('wikis/new');
   },
   create(req, res, next) {
     if (req.user) {
+      console.log('DEBUG: wikiController.create -> user object in session');
+      console.log('\n----------------------------------------\n\n');
+      console.log(req.user);
+      console.log('\n----------------------------------------\n\n');
+      console.log('DEBUG: wikiController.create -> user id');
+      console.log('\n----------------------------------------\n\n');
+      console.log(req.user.id);
+      console.log('\n----------------------------------------\n\n');
       const newWiki = {
         title: req.body.title,
         body: req.body.body,
+        private: false,
         userId: req.user.id,
       };
       wikiQueries.addWiki(newWiki, (err, wiki) => {
         if (err) {
+          console.log(err);
           res.redirect(500, 'wikis/new');
         } else {
           res.redirect(303, `/wikis/${wiki.id}`);

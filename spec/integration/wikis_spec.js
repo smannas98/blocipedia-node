@@ -60,9 +60,8 @@ describe('routes : wikis', () => {
   describe('GET /wikis/new', () => {
     it('should render a form to create a new wiki', (done) => {
       request.get(`${base}new`, (err, res, body) => {
-        console.log(body);
         expect(err).toBeNull();
-        //expect(body).toContain('New Wiki');
+        expect(body).toContain('New Wiki');
         done();
       });
     });
@@ -106,6 +105,7 @@ describe('routes : wikis', () => {
           });
       });
     });
+    /*
     xit('should not create a wiki that fails validation criteria', (done) => {
       const options = {
         url: `${base}create`,
@@ -128,6 +128,7 @@ describe('routes : wikis', () => {
           });
       });
     });
+    */
   });
 
   describe('POST /wikis/:id/update', () => {

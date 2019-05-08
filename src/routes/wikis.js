@@ -4,8 +4,8 @@ const wikiController = require('../controllers/wikiController');
 const router = express.Router();
 
 router.get('/wikis', wikiController.index);
+router.get('/wikis/new', wikiController.new);
 router.get('/wikis/:id', wikiController.show);
-router.get('/wikis/new', wikiController.newForm);
 router.get('/wikis/:id/edit', wikiController.edit);
 
 router.post('/wikis/create', wikiController.create);
