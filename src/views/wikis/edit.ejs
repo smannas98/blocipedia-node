@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../static/partials/head.ejs %>
+  </head>
+  <body>
+
+    <% include ../static/partials/navbar.ejs %>
+
+    <main class="container">
+      <h1>Edit Wiki</h1>
+
+      <form action="/wikis/<%= wiki.id %>/update" method="post">
+        <div class="form-group">
+          <label for="title">Wiki Title</label>
+          <input type="text" name="title" value="<%= wiki.title %>" class="form-control" aria-describedby="titleHelp" placeholder="Edit Title">
+        </div>
+        <div class="form-group">
+          <label for="Body">Wiki Body</label>
+          <textarea name="body" rows="80" cols="80" class="form-control" placeholder="Edit body"> <%= wiki.body %> </textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Update your wiki!</button>
+      </form>
+    </main>
+    <% include ../static/partials/baseScripts.ejs %>
+  </body>
+</html>

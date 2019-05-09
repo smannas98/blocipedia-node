@@ -33,6 +33,7 @@
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jasmine": "^2.10.1",
     "faker": "^4.1.0",
     "jasmine": "^3.4.0",
     "request": "^2.88.0"
