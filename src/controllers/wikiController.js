@@ -34,13 +34,13 @@ module.exports = {
       console.log('\n----------------------------------------\n\n');
       console.log('DEBUG: wikiController.create -> user id');
       console.log('\n----------------------------------------\n\n');
-      console.log(req.user.id);
+      console.log(Object.keys(req.user[0]));
       console.log('\n----------------------------------------\n\n');
       const newWiki = {
         title: req.body.title,
         body: req.body.body,
         private: false,
-        userId: req.user.id,
+        userId: req.user[0].id,
       };
       wikiQueries.addWiki(newWiki, (err, wiki) => {
         if (err) {
@@ -53,12 +53,13 @@ module.exports = {
     }
   },
   update(req, res, next) {
-    if (req.user) {
+    if (req.user.length) {
       wikiQueries.updateWiki(req.params.id, req.body, (err, wiki) => {
         if (err || wiki == null) {
-          res.redirect(404, `wikis/${req.params.id}/edit`);
+          res.redirect(404, `/wikis/${req.params.id}/edit`);
         } else {
-          res.redirect(`wikis/${req.params.id}`);
+          console.log(`wikis/${req.params.id}`);
+          res.redirect(`/wikis/${req.params.id}`);
         }
       });
     }
