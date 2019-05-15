@@ -1,4 +1,5 @@
 const wikiQueries = require('../db/queries.wikis.js');
+const Authorizer = require('../policies/application');
 
 module.exports = {
   index(req, res, next) {
@@ -19,15 +20,28 @@ module.exports = {
     wikiQueries.getWiki(req.params.id, (err, wiki) => {
       if (err || wiki == null) {
         res.redirect(404, '/');
+      } else {
+        const authorized = new Authorizer(req.user).edit();
+
+        if (authorized) {
+          res.render('wikis/edit', { wiki });
+        } else {
+          res.redirect('/wikis');
+        }
       }
-      res.render('wikis/edit', { wiki });
     });
   },
   new(req, res, next) {
-    res.render('wikis/new');
+    const authorized = new Authorizer(req.user).new();
+
+    if (authorized) {
+      res.render('wikis/new');
+    } else {
+      res.redirect('/wikis');
+    }
   },
   create(req, res, next) {
-    if (req.user) {
+    /*
       console.log('DEBUG: wikiController.create -> user object in session');
       console.log('\n----------------------------------------\n\n');
       console.log(req.user);
@@ -36,6 +50,10 @@ module.exports = {
       console.log('\n----------------------------------------\n\n');
       console.log(Object.keys(req.user[0]));
       console.log('\n----------------------------------------\n\n');
+      */
+    const authorized = new Authorizer(req.user).create();
+
+    if (authorized) {
       const newWiki = {
         title: req.body.title,
         body: req.body.body,
@@ -50,29 +68,27 @@ module.exports = {
           res.redirect(303, `/wikis/${wiki.id}`);
         }
       });
+    } else {
+      res.redirect('/wikis');
     }
   },
   update(req, res, next) {
-    if (req.user.length) {
-      wikiQueries.updateWiki(req.params.id, req.body, (err, wiki) => {
-        if (err || wiki == null) {
-          res.redirect(404, `/wikis/${req.params.id}/edit`);
-        } else {
-          console.log(`wikis/${req.params.id}`);
-          res.redirect(`/wikis/${req.params.id}`);
-        }
-      });
-    }
+    wikiQueries.updateWiki(req, req.body, (err, wiki) => {
+      if (err || wiki == null) {
+        res.redirect(404, `/wikis/${req.params.id}/edit`);
+      } else {
+        res.redirect(`/wikis/${req.params.id}`);
+      }
+    });
   },
   destroy(req, res, next) {
-    if (req.user) {
-      wikiQueries.deleteWiki(req.params.id, (err, deletedRecordsCount) => {
-        if (err) {
-          res.redirect(500, `/wikis/${req.params.id}`);
-        } else {
-          res.redirect(303, '/wikis');
-        }
-      });
-    }
+    wikiQueries.deleteWiki(req, (err, deletedRecordsCount) => {
+      if (err) {
+        console.log(err);
+        res.redirect(500, `/wikis/${req.params.id}`);
+      } else {
+        res.redirect(303, '/wikis');
+      }
+    });
   },
 };

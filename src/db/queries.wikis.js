@@ -1,5 +1,6 @@
 const { Wiki } = require('./models');
 const { User } = require('./models');
+const Authorizer = require('../policies/application');
 
 module.exports = {
   addWiki(newWiki, callback) {
@@ -31,28 +32,45 @@ module.exports = {
         callbackOnError(err);
       });
   },
-  updateWiki(id, updatedWiki, callback) {
-    return Wiki.findOne({ where: { id } }).then((wiki) => {
+  updateWiki(req, updatedWiki, callback) {
+    return Wiki.findOne({ where: { id: req.params.id } }).then((wiki) => {
       if (!wiki) {
         return callback('Wiki not found.');
       }
-      wiki.update(updatedWiki, {
-        fields: Object.keys(updatedWiki),
-      })
-        .then(() => {
-          callback(null, wiki);
+      const authorized = new Authorizer(req.user[0]).update();
+
+      if (authorized) {
+        wiki.update(updatedWiki, {
+          fields: Object.keys(updatedWiki),
         })
-        .catch((err) => {
-          callback(err);
-        });
+          .then(() => {
+            callback(null, wiki);
+          })
+          .catch((err) => {
+            callback(err);
+          });
+      } else {
+        callback(401);
+      }
     });
   },
-  deleteWiki(id, callback) {
-    return Wiki.destroy({
-      where: { id },
+  deleteWiki(req, callback) {
+    return Wiki.findOne({
+      where: { id: req.params.id },
     })
-      .then((deletedRecordsCount) => {
-        callback(null, deletedRecordsCount);
+      .then((wiki) => {
+        const authorized = new Authorizer(req.user[0], wiki).destroy();
+
+        if (authorized) {
+          Wiki.destroy({ where: { id: req.params.id } }).then((deletedRecordsCount) => {
+            callback(null, deletedRecordsCount);
+          })
+            .catch((err) => {
+              callback(err);
+            });
+        } else {
+          callback(401);
+        }
       })
       .catch((err) => {
         callback(err);
