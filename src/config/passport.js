@@ -16,7 +16,7 @@ module.exports = {
         where: { email },
       })
         .then((user) => {
-          // console.log(user);
+         console.log(user);
           if (!user || !authHelper.comparePassword(password, user.password)) {
             console.log('passport config says no user available');
             return done(null, false, { message: 'Invalid email or password' });
@@ -30,7 +30,7 @@ module.exports = {
     passport.deserializeUser((id, done) => {
       // console.log('user', User);
       // done(null, userId);
-      User.findAll({ where: { id } }).then((user) => {
+      User.findOne({ where: { id } }).then((user) => {
         done(null, user);
       })
         .catch((err) => {
