@@ -1,6 +1,9 @@
 const passport = require('passport');
 const sgMail = require('@sendgrid/mail');
+const stripe = require('stripe')('sk_test_QNHjEBAmf0C8MgBRuUHRJGgZ00DePFd2VG');
 const userQueries = require('../db/queries.users.js');
+
+const keyPublishable = 'pk_test_hMAgNIauwzj5kLnVjqMLxqlu00btbleSlk';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY); // api to send out emails
 
@@ -79,5 +82,36 @@ module.exports = {
   signOut(req, res, next) {
     req.logOut();
     res.redirect('/');
+  },
+  upgradeForm(req, res, next) {
+    res.render('users/upgrade');
+  },
+  downgradeForm(req, res, next) {
+    res.render('users/downgrade');
+  },
+  upgrade(req, res, next) {
+    const token = req.body.stripeToken;
+    const charge = stripe.charges.create({
+      amount: 1500,
+      currency: 'usd',
+      description: 'Account upgrade to premium',
+      source: token,
+    });
+    userQueries.upgradeUser(req, (err, user) => {
+      if (err) {
+        res.redirect('/users/upgrade');
+      } else {
+        res.redirect('/');
+      }
+    });
+  },
+  downgrade(req, res, next) {
+    userQueries.downgradeUser(req, (err, user) => {
+      if (err) {
+        res.redirect('/users/downgrade');
+      } else {
+        res.redirect('/');
+      }
+    });
   },
 };

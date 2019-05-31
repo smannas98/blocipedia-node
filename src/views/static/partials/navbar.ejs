@@ -13,16 +13,26 @@
           <a class="nav-link" href="/wikis">All wikis</a>
         </li>
 
-        <% if (!currentUser) { %>
+        <% if (currentUser && currentUser.role == 0) { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/users/sign_out">Sign out</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/users/<%= currentUser.id %>/upgrade">Upgrade Account</a>
+          </li>
+        <% } else if (currentUser && currentUser.role == 1) { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/users/sign_out">Sign out</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/users/<%= currentUser.id %>/downgrade">Downgrade Account</a>
+          </li>
+        <% } else { %>
           <li class="nav-item">
             <a class="nav-link" href="/users/sign_up">Sign up</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/users/sign_in">Sign in</a>
-          </li>
-        <% } else { %>
-          <li class="nav-item">
-            <a class="nav-link" href="/users/sign_out">Sign out</a>
           </li>
         <% } %>
       </ul>
