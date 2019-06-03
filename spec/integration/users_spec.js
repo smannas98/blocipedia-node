@@ -81,4 +81,21 @@ describe('routes : users', () => {
       });
     });
   });
+  describe('POST /users/:id/upgrade', () => {
+    it('should update the user role to premium', (done) => {
+      const options = {
+        url: `${base}${this.user.id}/upgrade`,
+        form: {
+          role: 1,
+        },
+      };
+      request.post(options, (err, res, body) => {
+        expect(err).toBeNull();
+        User.findOne({ where: { id: this.user.id } }).then((user) => {
+          expect(user.role).toBe(1);
+          done();
+        });
+      });
+    });
+  });
 });
