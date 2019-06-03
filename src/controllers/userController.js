@@ -99,8 +99,10 @@ module.exports = {
     });
     userQueries.upgradeUser(req, (err, user) => {
       if (err) {
+        req.flash('error', err);
         res.redirect('/users/upgrade');
       } else {
+        req.flash('notice', 'Your account is now premium!');
         res.redirect('/');
       }
     });
@@ -108,8 +110,10 @@ module.exports = {
   downgrade(req, res, next) {
     userQueries.downgradeUser(req, (err, user) => {
       if (err) {
+        req.flash('error', err);
         res.redirect('/users/downgrade');
       } else {
+        req.flash('notice', 'You have downgraded your account.');
         res.redirect('/');
       }
     });
