@@ -2,6 +2,7 @@ const passport = require('passport');
 const sgMail = require('@sendgrid/mail');
 const stripe = require('stripe')('sk_test_QNHjEBAmf0C8MgBRuUHRJGgZ00DePFd2VG');
 const userQueries = require('../db/queries.users.js');
+const wikiQueries = require('../db/queries.wikis.js');
 
 const keyPublishable = 'pk_test_hMAgNIauwzj5kLnVjqMLxqlu00btbleSlk';
 
@@ -115,6 +116,14 @@ module.exports = {
       } else {
         req.flash('notice', 'You have downgraded your account.');
         res.redirect('/');
+      }
+    });
+    wikiQueries.downgradeWikis(req, (err, wikis) => {
+      if (err) {
+        req.flash('erors', err);
+        res.redirect('/users/downgrade');
+      } else {
+        req.flash('notice', 'private wikis are now public.');
       }
     });
   },

@@ -24,6 +24,14 @@ module.exports = {
         callback(err);
       });
   },
+  getPublicWikis(callback, callbackOnError) {
+    return Wiki.findAll({ where: { private: false } }).then((wikis) => {
+      callback(wikis);
+    })
+      .catch((err) => {
+        callbackOnError(err);
+      });
+  },
   getAllWikis(callback, callbackOnError) {
     return Wiki.findAll().then((wikis) => {
       callback(wikis);
@@ -37,7 +45,7 @@ module.exports = {
       if (!wiki) {
         return callback('Wiki not found.');
       }
-      const authorized = new Authorizer(req.user[0]).update();
+      const authorized = new Authorizer(req.user).update();
 
       if (authorized) {
         wiki.update(updatedWiki, {
@@ -59,7 +67,7 @@ module.exports = {
       where: { id: req.params.id },
     })
       .then((wiki) => {
-        const authorized = new Authorizer(req.user[0], wiki).destroy();
+        const authorized = new Authorizer(req.user, wiki).destroy();
 
         if (authorized) {
           Wiki.destroy({ where: { id: req.params.id } }).then((deletedRecordsCount) => {
@@ -72,6 +80,19 @@ module.exports = {
           callback(401);
         }
       })
+      .catch((err) => {
+        callback(err);
+      });
+  },
+  downgradeWikis(req, callback) {
+    return Wiki.findAll({ where: { userId: req.user.id } }).then((wikis) => {
+      wikis.forEach((wiki) => {
+        if (wiki.private === true) {
+          wiki.update({ private: false });
+        }
+      });
+      callback(null, wikis);
+    })
       .catch((err) => {
         callback(err);
       });

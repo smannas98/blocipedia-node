@@ -19,6 +19,19 @@
           <label for="Body">Wiki Body</label>
           <textarea name="body" rows="80" cols="80" class="form-control" placeholder="Edit body"> <%= wiki.body %> </textarea>
         </div>
+        <% if (currentUser.role == 1 || currentUser.role == 2) { %>
+          <div class="form-group">
+            <label for="private">Private or Public</label>
+            <select class="form-control" name="private">
+              <option value="true">Private</option>
+              <option value="false">Public</option>
+            </select>
+          </div>
+        <% } else { %>
+          <div class="form-group">
+            <p>This will be a public Wiki. If you would like to make a private Wiki, consider upgrading to premium!</p>
+          </div>
+        <% } %>
         <button type="submit" class="btn btn-primary">Update your wiki!</button>
       </form>
     </main>

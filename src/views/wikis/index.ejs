@@ -16,9 +16,20 @@
       <ul class="list-group">
 
         <% wikis.forEach((wiki) => { %>
-          <li class="list-group-item">
-            <a href="/wikis/<%= wiki.id %>"> <%= wiki.title %> </a>
-          </li>
+          <% if (wiki.private == true) { %>
+            <li class="list-group-item">
+              <div style="display: flex; align-items: center;">
+                <div class="pull-left" style="width: 40px; text-align: center;">
+                  <p>Private</p>
+                </div>
+                <a href="/wikis/<%= wiki.id %>"> <%= wiki.title %> </a>
+              </div>
+            </li>
+          <% } else { %>
+            <li class="list-group-item">
+              <a href="/wikis/<%= wiki.id %>"> <%= wiki.title %> </a>
+            </li>
+          <% } %>
         <% }) %>
       </ul>
     </main>
