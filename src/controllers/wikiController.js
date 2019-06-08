@@ -3,9 +3,19 @@ const Authorizer = require('../policies/application');
 
 module.exports = {
   index(req, res, next) {
-    wikiQueries.getAllWikis((wikis) => {
-      res.render('wikis/index', { wikis });
-    });
+    if (req.user.role === 1 || req.user.role === 2) {
+      wikiQueries.getAllWikis((wikis) => {
+        console.log('DEBUG: wikiQueries.getAllWikis -> ');
+        console.log('/n---------------/n/n');
+        res.render('wikis/index', { wikis });
+      });
+    } else {
+      wikiQueries.getPublicWikis((wikis) => {
+        console.log('DEBUG: wikiQueries.getPublicWikis -> ');
+        console.log('/n---------------/n/n');
+        res.render('wikis/index', { wikis });
+      });
+    }
   },
   show(req, res, next) {
     wikiQueries.getWiki(req.params.id, (err, wiki) => {
@@ -41,23 +51,13 @@ module.exports = {
     }
   },
   create(req, res, next) {
-    /*
-      console.log('DEBUG: wikiController.create -> user object in session');
-      console.log('\n----------------------------------------\n\n');
-      console.log(req.user);
-      console.log('\n----------------------------------------\n\n');
-      console.log('DEBUG: wikiController.create -> user id');
-      console.log('\n----------------------------------------\n\n');
-      console.log(Object.keys(req.user[0]));
-      console.log('\n----------------------------------------\n\n');
-      */
     const authorized = new Authorizer(req.user).create();
 
     if (authorized) {
       const newWiki = {
         title: req.body.title,
         body: req.body.body,
-        private: false,
+        private: req.body.private,
         userId: req.user.id,
       };
       wikiQueries.addWiki(newWiki, (err, wiki) => {
