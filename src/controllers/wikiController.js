@@ -1,3 +1,4 @@
+const { markdown } = require('markdown');
 const wikiQueries = require('../db/queries.wikis.js');
 const Authorizer = require('../policies/application');
 
@@ -22,6 +23,7 @@ module.exports = {
       if (err || wiki == null) {
         res.redirect(404, '/');
       } else {
+        wiki.body = markdown.toHTML(wiki.body);
         res.render('wikis/show', { wiki });
       }
     });
