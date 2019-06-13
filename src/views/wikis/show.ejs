@@ -17,6 +17,23 @@
         <h1><%= wiki.title %></h1>
       </div>
       <p><%- wiki.body %></p>
+
+      <% if(wiki.collaborators) { %>
+        <h3>Collaborators</h3>
+        <ul>
+          <% wiki.collaborators.forEach((collaborator) => { %>
+            <li>
+              <p> <%= collaborator.User.username %> </p>
+              <p> <%= collaborator.User.email %> </p>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
+
+      <% if(currentUser.role == 2 || (currentUser.role == 1 && currentUser.id == wiki.userId)) { %>
+        <a href="/wikis/<%= wiki.id %>/collaborators/add" class="btn btn-warning">Add Collaborator</a>
+        <a href="/wikis/<%= wiki.id %>/collaborators/delete" class="btn btn-warning">Delete Collaborator</a>
+      <% } %>
     </main>
     <% include ../static/partials/baseScripts.ejs %>
   </body>

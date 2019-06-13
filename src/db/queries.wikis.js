@@ -1,6 +1,10 @@
+const Sequelize = require('sequelize');
 const { Wiki } = require('./models');
 const { User } = require('./models');
+const { Collaborator } = require('./models');
 const Authorizer = require('../policies/application');
+
+const { Op } = Sequelize;
 
 module.exports = {
   addWiki(newWiki, callback) {
@@ -11,14 +15,52 @@ module.exports = {
         callback(err);
       });
   },
-  getWiki(id, callback) {
-    return Wiki.findOne({ where: { id } }, {
+  getWiki(req, callback) {
+    return Wiki.findOne({ where: { id: req.params.id } }, {
       include: [
-        { model: User },
+        {
+          model: Collaborator,
+          as: 'collaborators',
+          include: [
+            { model: User },
+          ],
+        },
       ],
     })
       .then((wiki) => {
-        callback(null, wiki);
+        if (wiki.private === false) {
+          callback(null, wiki);
+        } else if (req.user.role === 1 || req.user.role === 2) {
+          callback(null, wiki);
+        } else if (req.user.role === 0) {
+          Collaborator.findOne({ where: { userId: req.user.id } }).then((collaborator) => {
+            if (!collaborator) {
+              callback('not authorized');
+            } else if (collaborator.wikiId === wiki.id) {
+              callback(null, wiki);
+            } else {
+              callback('not authorized');
+            }
+          })
+            .catch((err) => {
+              callback(err);
+            });
+        } else {
+          callback('not authorized');
+        }
+      })
+      .catch((err) => {
+        callback(err);
+      });
+  },
+  getCollaboratorWikis(collaborator, callback) {
+    return Wiki.findAll({
+      where: {
+        [Op.or]: [{ private: false }, { id: collaborator.wikiId }],
+      },
+    })
+      .then((wikis) => {
+        callback(null, wikis);
       })
       .catch((err) => {
         callback(err);
