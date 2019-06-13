@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include ../static/partials/head.ejs %>
+  </head>
+  <body>
+    <% include ../static/partials/navbar.ejs %>
+
+    <main class="container">
+      <h1>Add Collaborator</h1>
+      <hr>
+      <form action="/wikis/<%= wikiId %>/collaborators/destroy" method="POST">
+        <div class="form-group">
+          <label for="userName">Username</label>
+          <input type="text" class="form-control" name="collaboratorUserName" placeholder="Enter Username">
+          <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+        </div>
+      </form>
+    </main>
+
+    <% include ../static/partials/baseScripts.ejs %>
+
+  </body>
+</html>
