@@ -17,7 +17,7 @@
     "dotenv": "^7.0.0",
     "ejs": "^2.6.1",
     "eslint-cli": "^1.1.1",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-flash": "0.0.2",
     "express-session": "^1.16.1",
     "express-validator": "^5.3.1",
